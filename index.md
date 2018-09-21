@@ -1,37 +1,65 @@
-## Welcome to GitHub Pages
+[jQuery Validation Plugin](https://jqueryvalidation.org/) - Form validation made easy
+================================
 
-You can use the [editor on GitHub](https://github.com/ganagesm/jquery-form-validation/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
+The jQuery Validation Plugin provides drop-in validation for your existing forms, while making all kinds of customizations to fit your application really easy.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## Getting Started
 
-### Markdown
+### Downloading the prebuilt files
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Prebuilt files can be downloaded from https://jqueryvalidation.org/
 
-```markdown
-Syntax highlighted code block
+### Downloading the latest changes
 
-# Header 1
-## Header 2
-### Header 3
+The unreleased development files can be obtained by:
 
-- Bulleted
-- List
+ 1. [Downloading](https://github.com/jquery-validation/jquery-validation/archive/master.zip) or Forking this repository
+ 2. [Setup the build](CONTRIBUTING.md#build-setup)
+ 3. Run `grunt` to create the built files in the "dist" directory
 
-1. Numbered
-2. List
+### Including it on your page
 
-**Bold** and _Italic_ and `Code` text
+Include jQuery and the plugin on a page. Then select a form to validate and call the `validate` method.
 
-[Link](url) and ![Image](src)
+```html
+<form>
+	<input required>
+</form>
+<script src="jquery.js"></script>
+<script src="jquery.validate.js"></script>
+<script>
+    $("form").validate();
+</script>
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+Alternatively include jQuery and the plugin via requirejs in your module.
 
-### Jekyll Themes
+```js
+define(["jquery", "jquery.validate"], function( $ ) {
+	$("form").validate();
+});
+```
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/ganagesm/jquery-form-validation/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+For more information on how to setup a rules and customizations, [check the documentation](https://jqueryvalidation.org/documentation/).
 
-### Support or Contact
+**IMPORTANT NOTE ABOUT EMAIL VALIDATION**. As of version 1.12.0 this plugin is using the same regular expression that the [HTML5 specification suggests for browsers to use](https://html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address). We will follow their lead and use the same check. If you think the specification is wrong, please report the issue to them. If you have different requirements, consider [using a custom method](https://jqueryvalidation.org/jQuery.validator.addMethod/).
+In case you need to adjust the built-in validation regular expression patterns, please [follow the documentation](https://jqueryvalidation.org/jQuery.validator.methods/).
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+**IMPORTANT NOTE ABOUT REQUIRED METHOD**. As of version 1.14.0 this plugin stops trimming white spaces from the value of the attached element. If you want to achieve the same result, you can use the [`normalizer`](https://jqueryvalidation.org/normalizer/) that can be used to transform the value of an element before validation. This feature was available since `v1.15.0`. In other words, you can do something like this:
+``` js
+$("#myForm").validate({
+	rules: {
+		username: {
+			required: true,
+			// Using the normalizer to trim the value of the element
+			// before validating it.
+			//
+			// The value of `this` inside the `normalizer` is the corresponding
+			// DOMElement. In this example, `this` references the `username` element.
+			normalizer: function(value) {
+				return $.trim(value);
+			}
+		}
+	}
+});
+```
